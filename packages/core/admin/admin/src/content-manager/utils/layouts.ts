@@ -209,7 +209,7 @@ const formatLayoutWithMetas = (
 interface ListLayoutRow {
   key: string;
   name: string;
-  fieldSchema: Attribute.Any;
+  fieldSchema: Attribute.Any | { type: 'custom' };
   metadatas: Metadata['list'];
 }
 
@@ -357,8 +357,10 @@ export type {
   FormattedLayouts,
   FormattedContentTypeLayout,
   FormattedComponentLayout,
+  ListLayoutRow,
   EditLayoutRow,
   Metadata,
   SettingsViewContentTypeLayout,
   SettingsViewComponentLayout,
+  MainField,
 };

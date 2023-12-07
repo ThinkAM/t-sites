@@ -12,7 +12,7 @@ import type {
   GetReleases,
 } from '../../../shared/contracts/releases';
 import type { UserInfo } from '../../../shared/types';
-import { getAllowedContentTypes, getService } from '../utils';
+import { getService } from '../utils';
 
 type ReleaseWithPopulatedActions = Release & { actions: { count: number } };
 
@@ -70,23 +70,10 @@ const releaseController = {
 
     const releaseService = getService('release', { strapi });
 
-    const allowedContentTypes = getAllowedContentTypes({
-      strapi,
-      userAbility: ctx.state.userAbility,
-    });
-
     const release = await releaseService.findOne(id);
-    const total = await releaseService.countActions({
+    const count = await releaseService.countActions({
       filters: {
         release: id,
-      },
-    });
-    const totalHidden = await releaseService.countActions({
-      filters: {
-        release: id,
-        contentType: {
-          $notIn: allowedContentTypes,
-        },
       },
     });
 
@@ -99,8 +86,7 @@ const releaseController = {
       ...release,
       actions: {
         meta: {
-          total,
-          totalHidden,
+          count,
         },
       },
     };

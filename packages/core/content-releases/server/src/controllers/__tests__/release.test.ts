@@ -10,7 +10,7 @@ jest.mock('../../utils', () => ({
     findPage: mockFindPage,
     findManyForContentTypeEntry: mockFindManyForContentTypeEntry,
     countActions: mockCountActions,
-    findReleaseContentTypesMainFields: jest.fn(),
+    getAllContentTypesMetaData: jest.fn(),
   })),
   getAllowedContentTypes: jest.fn(() => ['contentTypeA', 'contentTypeB']),
 }));
@@ -184,8 +184,7 @@ describe('Release controller', () => {
         data: {
           actions: {
             meta: {
-              total: 0,
-              totalHidden: 0,
+              count: 0,
             },
           },
           meta: {},
@@ -198,7 +197,7 @@ describe('Release controller', () => {
       expect(() => releaseController.findOne(ctx).rejects.toThrow('Release not found for id: 1'));
     });
 
-    it('return the right meta object', async () => {
+    it('returns the right meta object', async () => {
       // We mock the count all actions
       mockCountActions.mockResolvedValueOnce(2);
 
@@ -208,8 +207,7 @@ describe('Release controller', () => {
       // @ts-expect-error partial context
       await releaseController.findOne(ctx);
       expect(ctx.body.data.actions.meta).toEqual({
-        total: 2,
-        totalHidden: 1,
+        count: 2,
       });
     });
   });
